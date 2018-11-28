@@ -20,11 +20,28 @@ namespace csharpRestClient
 
     }
 
+    public enum authenticationType
+    {
+        Basic,
+        NTLM
+    }
+
+    public enum authenticationTechnique
+    {
+        RollYourOwn,
+        NetworkCredential
+    }
+
     class RestClient
     {
 
         public string endPoint { get; set; }
         public httpVerb httpMethod { get; set; }
+        public authenticationType authType { get; set; }
+        public authenticationTechnique authTech { get; set; }
+        public string userName { get; set; }
+        public string userPassword { get; set; }
+
 
         public RestClient()
         {
@@ -39,7 +56,29 @@ namespace csharpRestClient
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endPoint);
 
+            request.Method = httpMethod.ToString();
+
+
+            if(authTech == authenticationTechnique.RollYourOwn)
+            {
+                string authHeaer = System.Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(userName + ":" + userPassword));
+
+                request.Headers.Add("Authorization", "Basic " + authHeaer);
+
+            }
+            else
+            {
+                NetworkCredential netCred = new NetworkCredential(userName, userPassword);
+                request.Credentials = netCred;
+            
+            }
+
+
+
+
             HttpWebResponse response = null;
+
+           
 
             try
             {

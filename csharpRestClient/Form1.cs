@@ -33,6 +33,26 @@ namespace csharpRestClient
 
             RestClient rClient = new RestClient();
             rClient.endPoint = txtRestURI.Text;
+
+            if(rdoRollOwn.Checked)
+            {
+                rClient.authTech = authenticationTechnique.RollYourOwn;
+                debugOutput("authTechnique: Roll Your Own");
+                debugOutput("authType: Basic");
+
+            }
+            else
+            {
+                rClient.authTech = authenticationTechnique.NetworkCredential;
+                debugOutput("authTechnique: NetworkCredentials");
+                debugOutput("authType: ??? - NetCred decides");
+
+            }
+
+
+            rClient.userName = txtUsername.Text;
+            rClient.userPassword = txtPassword.Text;
+
             debugOutput("Rest Client Created");
 
             String strResponse = string.Empty;
@@ -56,6 +76,21 @@ namespace csharpRestClient
             {
                 System.Diagnostics.Debug.Write(ex.Message, ToString() + Environment.NewLine);
             }
+        }
+
+        private void txtResponse_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
